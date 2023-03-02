@@ -18,10 +18,11 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const run = async()=>{
     try{
         const db = client.db("moontech")
-        const productCollection = db.collection('product')
+        // const productCollection = db.collection('product')
+        const productsCollection = db.collection('products')
 
         app.get('/products', async(req,res)=>{
-            const cursor = productCollection.find({});
+            const cursor = productsCollection.find({});
             const product = await cursor.toArray()
 
             res.send({status : true, data : product});
@@ -29,7 +30,7 @@ const run = async()=>{
 
         app.post('/product', async(req,res) =>{
             const product = req.body;
-            const result = await productCollection.insertOne(product)
+            const result = await productsCollection.insertOne(product)
             res.send(result)
 
         })
@@ -37,7 +38,7 @@ const run = async()=>{
         app.delete('/product/:id', async (req, res) => {
             const id = req.params.id;
 
-            const result = await productCollection.deleteOne({_id: ObjectId(id)});
+            const result = await productsCollection.deleteOne({_id: ObjectId(id)});
             res.send(result);
         })
     }
